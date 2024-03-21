@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js 16.x
-      uses: actions/setup-node@v2
+    - uses: actions/checkout@v4
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
       with:
-        node-version: 16.x
-        cache: "npm"
-        cache-dependency-path: package-lock.json
+        node-version: 20.x
+    - name: bypass npm bug
+      run: rm package-lock.json
     - name: version
-      run: echo "::set-output name=version::$(cat VERSION.md)"
+      run: echo "build_version=$(cat VERSION.md)" >> $GITHUB_ENV
       id: version
-    - run: npm ci
+    - run: npm install
     - name: Publish release
       run: npm run build --if-present
     # no tests for now...
@@ -28,33 +28,33 @@ jobs:
 
     # publish
     - name: Publish
-      run: cd ./.output/ && tar -czf veil.tools-${{ steps.version.outputs.version }}.tar.gz *
-    - uses: actions/upload-artifact@v2
+      run: cd ./.output/ && tar -czf veil.tools-${{ env.build_version }}.tar.gz *
+    - uses: actions/upload-artifact@v4
       with:
-        name: veil.tools-${{ steps.version.outputs.version }}
-        path: ./.output/veil.tools-${{ steps.version.outputs.version }}.tar.gz
+        name: veil.tools-${{ env.build_version }}
+        path: ./.output/veil.tools-${{ env.build_version }}.tar.gz
 
   publish-release:
     needs: [build-website]
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: version
-        run: echo "::set-output name=version::$(cat VERSION.md)"
+        run: echo "build_version=$(cat VERSION.md)" >> $GITHUB_ENV
         id: version
 
       - uses: actions/download-artifact@master
         with:
-          name: veil.tools-${{ steps.version.outputs.version }}
-          path: artifacts/veil.tools-${{ steps.version.outputs.version }}.tar.gz
+          name: veil.tools-${{ env.build_version }}
+          path: artifacts/veil.tools-${{ env.build_version }}.tar.gz
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: false
-          title: ${{ steps.version.outputs.version }}
+          title: ${{ env.build_version }}
           files: |
             LICENSE
             README.md

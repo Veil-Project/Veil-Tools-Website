@@ -1,5 +1,5 @@
 # Website building
-[NodeJS 16 and npm](https://nodejs.org/en/) required to build frontend.
+[NodeJS 20 and npm](https://nodejs.org/en/) required to build frontend.
 
 ## Setup
 
@@ -9,9 +9,9 @@ Make sure to install the dependencies
 npm install
 ```
 
-## Upgrade nuxt3 to latest version
+## Upgrade nuxt to latest version
 ```bash
-npx nuxi upgrade
+npx nuxi upgrade --force
 ```
 
 ## Check typings

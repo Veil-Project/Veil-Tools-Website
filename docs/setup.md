@@ -3,9 +3,9 @@
 *To save file and close nano editor* press **CTRL+X** than **SHIFT+Y** than **ENTER**
 
 ## Setup
-Required OS: **ubuntu 20.04+**
+Required OS: **ubuntu 22.04+**
 
-Recommended OS: **ubuntu 20.04.3 LTS**
+Recommended OS: **ubuntu 22.04 LTS**
 
 Required Software:
 1. [NodeJS 16+](https://nodejs.org/en/)
@@ -21,7 +21,7 @@ sudo apt upgrade
 ## Install NodeJS 16
 ```bash
 # add nodesource PPA
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo bash -
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
 # install nodejs
 sudo apt install nodejs
 ```
@@ -39,8 +39,8 @@ sudo mkdir /home/website/server/
 
 ## Download and unpack frontend build (change version in link and command to actual)
 ```bash
-sudo wget https://github.com/Veil-Project/Veil-Tools-Website/releases/download/latest/veil.tools-1.1.0.tar.gz
-sudo tar -xzf veil.tools-1.0.0.tar.gz -C /home/website/server/
+sudo wget https://github.com/Veil-Project/Veil-Tools-Website/releases/download/latest/veil.tools-2.0.0.tar.gz
+sudo tar -xzf veil.tools-2.0.0.tar.gz -C /home/website/server/
 ```
 
 ## Issue permissions for frontend
@@ -63,17 +63,19 @@ Add this content to opened file, change variables if required:
 export HOST=0.0.0.0
 # listen port
 export PORT=3000
+# run in cluster mode
+NITRO_PRESET=node-cluster
 # url on which frontend available, used for SEO, meta tags etc.
-export BASE_URL=http://<ip>:3000
+export NUXT_BASE_URL=http://<ip>:3000
+export NUXT_BASE_URL_FRONTEND=http://<ip>:3000
 # escaped json string with mirrors addresses (each should contain snapshot.json speedtest.min.bin and speedtest.bin, also sha256 hashes in txt and snapshots)
-export SNAPSHOT_MIRRORS="[{\"name\": \"Mainnet\", \"icon\": \"/images/networks/mainnet.svg\", \"mirrors\": [{\"name\": \"NA1\", \"path\": \"https://mirror-na1.veil.tools/\"}, {\"name\": \"NA2\", \"path\": \"https://mirror-na2.veil.tools/\"},{\"name\": \"EU1\", \"path\": \"https://mirror-eu1.veil.tools/\"}, {\"name\": \"EU2\", \"path\": \"https://mirror-eu2.veil.tools/\"}]}, {\"name\": \"Testnet\", \"icon\": \"/images/networks/testnet.svg\", \"mirrors\": [{\"name\": \"NA1\", \"path\": \"https://mirror-na1.veil.tools/testnet/\"}, {\"name\": \"NA2\", \"path\": \"https://mirror-na2.veil.tools/testnet/\"},{\"name\": \"EU1\", \"path\": \"https://mirror-eu1.veil.tools/testnet/\"}, {\"name\": \"EU2\", \"path\": \"https://mirror-eu2.veil.tools/testnet/\"}]}]"
+export NUXT_SNAPSHOT_MIRRORS="[{\"name\": \"Mainnet\", \"icon\": \"/images/networks/mainnet.svg\", \"mirrors\": [{\"name\": \"NA1\", \"path\": \"https://mirror-na1.veil.tools/\"}, {\"name\": \"NA2\", \"path\": \"https://mirror-na2.veil.tools/\"},{\"name\": \"EU1\", \"path\": \"https://mirror-eu1.veil.tools/\"}, {\"name\": \"EU2\", \"path\": \"https://mirror-eu2.veil.tools/\"}]}, {\"name\": \"Testnet\", \"icon\": \"/images/networks/testnet.svg\", \"mirrors\": [{\"name\": \"NA1\", \"path\": \"https://mirror-na1.veil.tools/testnet/\"}, {\"name\": \"NA2\", \"path\": \"https://mirror-na2.veil.tools/testnet/\"},{\"name\": \"EU1\", \"path\": \"https://mirror-eu1.veil.tools/testnet/\"}, {\"name\": \"EU2\", \"path\": \"https://mirror-eu2.veil.tools/testnet/\"}]}]"
 # explorer backend endpoint
-export EXPLORER_BACKEND_ENDPOINT=https://explorer-api.veil-project.com
+export NUXT_EXPLORER_BACKEND_ENDPOINT=https://explorer-api.veil-project.com
 # size of speedtest.min.bin
-export NETWORK_PRE_MEASURE_FILE_SIZE=51200
+export NUXT_NETWORK_PRE_MEASURE_FILE_SIZE=51200
 # size of speedtest.bin
-export NETWORK_MEASURE_FILE_SIZE=3145728
-export COOKIE_SAVE_DAYS=90
+export NUXT_NETWORK_MEASURE_FILE_SIZE=3145728
 
 node server/index.mjs
 ```

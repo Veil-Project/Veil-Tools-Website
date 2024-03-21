@@ -1,6 +1,6 @@
-import type { IncomingMessage, ServerResponse } from "http";
 import NodeCache from "node-cache";
-import { PriceInfo } from "~/models/PriceInfo";
+import type { PriceInfo } from "~/models/PriceInfo";
+import { setResponseHeader } from "h3";
 
 export const primaryCache = new NodeCache();
 const cacheInvalidateTime = 60;
@@ -40,12 +40,12 @@ const getPrice = async () => {
     }
 }
 
-export default async (req: IncomingMessage, res: ServerResponse) => {
+export default defineEventHandler(async (event) => {
 
     const result = await getPrice();
 
-    res.statusCode = 200;
-    res.setHeader("content-type", "application/json");
+    setResponseStatus(event, 200);
+    setResponseHeader(event, "content-type", "application/json");
 
-    res.end(JSON.stringify(result));
-}
+    return result;
+});
